@@ -78,6 +78,10 @@ _check_requirements() {
   DOCKER_COMPOSE_EXE=$(/usr/bin/which docker-compose || echo 0)
   checks::executable_check ${DOCKER_COMPOSE_EXE} "docker-compose"
   DOCKER_COMPOSE_VERSION="$(${DOCKER_COMPOSE_EXE} --version | cut -f 3 -d' ' | cut -f 1,2 -d '.')";
+  if [[ "$DOCKER_COMPOSE_VERSION" == "version" ]]; then
+    DOCKER_COMPOSE_VERSION="$(${DOCKER_COMPOSE_EXE} --version | cut -f 4 -d' ' | cut -f 2 -d 'v' | cut -f 1,2 -d '.')"
+  fi
+  [[ $DOCKER_COMPOSE_VERSION = 'version']] &&
   checks::version_check ${DOCKER_COMPOSE_VERSION} ${MINIMUM_DOCKER_COMPOSE_VERSION} "Docker Compose"
 
   MAKE_EXE=$(/usr/bin/which make || echo 0)
